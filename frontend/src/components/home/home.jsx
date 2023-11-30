@@ -4,9 +4,28 @@ import {Col} from 'react-bootstrap'
 import './home.css'
 import Poll from '../poll/poll'
 
-export default function Home() {
-    const options = ['aaa', "bbb", "ccc", "robert", "oho", "oooo"]
+import { getPolls } from '../../services/poll.services/getpolls.service'
+import { getUser } from '../../services/user.services/getuser.service'
 
+import { useEffect, useState } from 'react'
+
+export default function Home() {
+    const [polls, setPolls] = useState([])
+    const [user, setUser] = useState({})
+
+    useEffect(() => {
+        getUser()
+        .then(res => {
+            setUser(res.data)
+        })
+    }, [])
+
+    useEffect(() => {
+        getPolls()
+        .then(res => {
+            setPolls(res.data)
+        })
+    })
     return (
         <>
         <div>
@@ -26,22 +45,16 @@ export default function Home() {
                     />
             </Col>
             </Row>
-            <Row>
-            <Col>
-                <Poll question="Rares?" options={options} key='1'/>
-            </Col>
-            <Col>
-                <Poll question="Codrut?" options={options} key='2'/>
-            </Col>
-            </Row>
-            <Row>
-            <Col>
-                <Poll question="Rares?" options={options} key='1'/>
-            </Col>
-            <Col>
-                <Poll question="Codrut?" options={options} key='2'/>
-            </Col>
-            </Row>
+            {polls.map((poll, index) => (
+                <Row key={index}>
+                    <Col>
+                        <Poll 
+                        currentUser={user}
+                        poll={poll} 
+                        />
+                    </Col>
+                </Row>
+            ))}
         </Container>
         </div>
         </>

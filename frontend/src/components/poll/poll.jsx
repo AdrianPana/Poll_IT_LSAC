@@ -1,19 +1,45 @@
 import { Button, Container } from 'react-bootstrap'
 import './poll.css'
 import { Form } from 'react-bootstrap'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function Poll({question, options}) {
+import { vote } from '../../services/poll.services/vote.service';
+import { erase } from '../../services/poll.services/deletepoll.service'
+
+export default function Poll({poll, currentUser}) {
     const [selectedOption, setSelectedOption] = useState(null);
+    const [canVote, setVote] = useState(false)
+    const [canDelete, setDelete] = useState(false)
+
+    const {_id, question, options, voters, owner} = poll
+
+    useEffect(() => {
+        setVote(!voters.includes(currentUser._id))
+        setDelete(owner == currentUser._id)
+    })
 
     const handleOptionChange = (event) => {
-      setSelectedOption(event.target.value);
+        setSelectedOption(event.target.value);
     };
   
     const handleSubmit = (event) => {
-      event.preventDefault();
-      console.log('Selected Option:', selectedOption);
+        event.preventDefault();
+        
+        vote(_id, selectedOption)
+        .then(res => {
+            console.log(res.data)
+        })
     };
+
+    const deletePoll = (event) => {
+        event.preventDefault();
+
+        erase(_id)
+        .then(res => {
+            console.log(res)
+        })
+    }
+
     return (
         <>
         <div className='poll-container'>
@@ -22,7 +48,7 @@ export default function Poll({question, options}) {
                 <div>
                     <label className='prompt-text'> Make a choice: </label>
                 </div>
-                {options.map((text, index) => (
+                {options.map((option, index) => (
                     <div key={index}>
                         <label key={index} className='poll-option' >
                         <input 
@@ -31,15 +57,16 @@ export default function Poll({question, options}) {
                             value={index}
                             checked={selectedOption == index}    
                             onChange={handleOptionChange}            
-                            /> {text}
+                            /> {option['option']}
                             </label>
+                        <span className='option-votes'>{option['votes']}</span>
                         </div>
                     ))}
                     <div className='poll-submit-button'>
-                        <Button  disabled={selectedOption == null} variant="dark" type="submit">Vote</Button>
+                        <Button disabled={!canVote || selectedOption == null} variant="dark" type="submit">Vote</Button>
                     </div>
                     <div className='poll-delete-button'>
-                        <Button variant="danger">Delete</Button>
+                        <Button disabled = {!canDelete} variant="danger" onClick={deletePoll}>Delete</Button>
                     </div>
             </Form>
         </div>

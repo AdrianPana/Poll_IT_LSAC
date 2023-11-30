@@ -1,16 +1,28 @@
 import {Modal, Form, Button} from 'react-bootstrap'
+import '../modal.css'
+import { useState } from 'react';
+
+import { register } from '../../../services/user.services/register.service'
+import { login } from '../../../services/user.services/login.service';
 
 export default function RegisterModal(props) {
 
-    const handleChange = (event) => {
-        console.log('AAAAA')
-      };
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confPassword, setConfPassword] = useState('')
     
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('BBBB');
+      const handleSubmit = (e) => {
+        e.preventDefault()
+        
+        register(email, password, confPassword)
+        .then(res => {
+            login(email, password)
+            .then(res => {
+                localStorage.setItem("jwt", res.data.message)
+                props.onHide()
+            })
+        })
       };
-    
     return (
         <>
             <Modal
@@ -25,19 +37,22 @@ export default function RegisterModal(props) {
                             type='email'
                             name="email"
                             placeholder="Email"
-                            onChange={handleChange}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required/>
                         <input
                             type='password'
                             name="password"
                             placeholder="Password"
-                            onChange={handleChange}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required/>
                         <input
                             type='password'
                             name="confirm-password"
                             placeholder="Confirm password"
-                            onChange={handleChange}
+                            value={confPassword}
+                            onChange={(e) => setConfPassword(e.target.value)}
                             required/>
                         <div>
                             <Button type='submit'> Create account </Button>

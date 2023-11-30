@@ -1,17 +1,37 @@
 import {Modal, Form, Button} from 'react-bootstrap'
 import '../modal.css'
+import { useState } from 'react';
+
+import { createPoll } from '../../../services/poll.services/createpoll.service';
+
 
 export default function PollCreateModal(props) {
-
-    const handleChange = (event) => {
-        console.log('AAAAA')
-      };
     
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('BBBB');
-      };
+    const [title, setTitle] = useState('')
+    const [optionNo, setOptionNo] = useState(3)
+    const [options, setOptions] = useState([])
 
+    const handleOptionsChange = (e) => {
+        const {name, value} = e.target
+        setOptions((arr) => ({
+            ...arr,
+            [name]: value
+        }))
+    }
+    
+    const handleSubmit = (e) => {
+    e.preventDefault()
+    
+    const ops = []
+    for (let i = 0 ; i < optionNo; i++) {
+        ops.push(options[i])
+    }
+
+    createPoll(title, ops)
+    .then(res => {
+        props.onHide()
+    })
+    };
     return (
         <>
             <Modal className='modal'
@@ -27,27 +47,21 @@ export default function PollCreateModal(props) {
                             type='text'
                             name="Question"
                             placeholder="Type your question here"
-                            onChange={handleChange}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             required/>
                         <Form.Label>Answer Options</Form.Label>
-                        <input
-                            type='text'
-                            name="option1"
-                            placeholder="Option1"
-                            onChange={handleChange}
-                            required/>
-                        <input
-                            type='text'
-                            name="option2"
-                            placeholder="Option2"
-                            onChange={handleChange}
-                            required/>
-                        <input
-                            type='text'
-                            name="option3"
-                            placeholder="Option3"
-                            onChange={handleChange}
-                            required/>
+                        {
+                            [...Array(optionNo)].map((option, index) => (
+                                <input key={index}
+                                type='text'
+                                name={index}
+                                placeholder={"Option" + index}
+                                value={options[index]}
+                                onChange={handleOptionsChange}
+                                required/>
+                            ))
+                        }
                         <div>
                             <Button type='submit'> Create poll </Button>
                         </div>

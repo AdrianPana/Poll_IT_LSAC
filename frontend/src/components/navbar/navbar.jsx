@@ -9,11 +9,15 @@ import LoginModal from '../modals/loginModal/loginModal'
 import RegisterModal from '../modals/registerModal/registerModal'
 import PollCreateModal from '../modals/pollCreateModal/pollCreateModal'
 
+import { logout } from '../../services/user.services/logout.service'
+
 export default function MyNavbar() {
 
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
     const [showCreatePoll, setShowCreatePoll] = useState(false);
+
+    const jwt = localStorage.getItem("jwt")
 
     return (
         <>
@@ -30,18 +34,29 @@ export default function MyNavbar() {
             </div>
             <div className="ml-auto">
                 <Nav>
-                    {/* <div className='navbar-button'>
+                    {!jwt ? 
+                    (
+                    <>
+                        <div className='navbar-button'>
                         <Button variant="outline-dark" onClick={() => setShowLogin(true)}> Login </Button>
-                    </div>
-                    <div>
-                        <Button variant="outline-dark" onClick={() => setShowRegister(true)}> Register </Button>
-                    </div> */}
-                    <div className='navbar-button'>
+                        </div>
+                        <div>
+                            <Button variant="outline-dark" onClick={() => setShowRegister(true)}> Register </Button>
+                        </div>
+                    </>
+                    ) : 
+                    (
+                    <>
+                        <div className='navbar-button'>
                         <Button variant="outline-dark" onClick={() => setShowCreatePoll(true)}> Create poll </Button>
-                    </div> 
-                    <div>
-                        <Button variant="outline-dark"> Logout </Button>
-                    </div>
+                        </div> 
+                        <div>
+                            <a href = '/'>
+                            <Button variant="outline-dark" onClick={logout}> Logout </Button>
+                            </a>
+                        </div>
+                    </>
+                    )}
                 </Nav>
             </div>
         </Container>

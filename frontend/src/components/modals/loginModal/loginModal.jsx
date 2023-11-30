@@ -1,15 +1,22 @@
 import {Modal, Form, Button} from 'react-bootstrap'
 import '../modal.css'
+import { useState } from 'react';
+
+import { login } from '../../../services/user.services/login.service'
 
 export default function LoginModal(props) {
 
-    const handleChange = (event) => {
-        console.log('AAAAA')
-      };
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('BBBB');
+      const handleSubmit = (e) => {
+        e.preventDefault()
+        
+        login(email, password)
+        .then(res => {
+            localStorage.setItem("jwt", res.data.message)
+            props.onHide()
+        })
       };
 
     return (
@@ -26,13 +33,15 @@ export default function LoginModal(props) {
                             type='email'
                             name="email"
                             placeholder="Email"
-                            onChange={handleChange}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required/>
                         <input
                             type='password'
                             name="password"
                             placeholder="Password"
-                            onChange={handleChange}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required/>
                         <div>
                             <Button type='submit'> Login </Button>
