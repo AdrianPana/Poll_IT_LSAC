@@ -1,0 +1,50 @@
+.poll-container {
+    background-color: white;
+    color: black;
+    border: 2px;
+    border-radius: 15px;
+    padding-left: 15px;
+    /* margin-left: 25px;
+    margin-right: 10px; */
+    margin: 20px 10px 20px 25px;
+}
+
+.prompt-text {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.poll-question {
+    margin-top: 15px;
+    margin-left: 5px;
+}
+
+.poll-option {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 8px;
+    font-size: 15px;
+}
+
+.poll-radio {
+    /* appearance: none; */
+    width: 20px; /* Set the width of the radio button */
+    height: 20px; /* Set the height of the radio button */
+    border-radius: 50%; /* Create a circular shape */
+    border: 2px solid #04395E; /* Set the border color */
+    background-color: white; /* Set the background color */
+    margin-right: 5px; /* Optional: Add spacing between the radio button and text */
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.poll-radio:checked {
+    background-color: #04395E;
+    box-shadow: 0 0 0 5px white;
+}
+
+.poll-submit-button {
+    margin-top: 5px;
+    /* margin-bottom: 10px;
+    margin-left: auto */
+}
