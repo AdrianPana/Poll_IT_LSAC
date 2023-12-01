@@ -4,36 +4,42 @@
     border: 2px;
     border-radius: 15px;
     padding-left: 15px;
-    /* margin-left: 25px;
-    margin-right: 10px; */
-    margin: 20px 10px 20px 25px;
+    padding-right: 15px;
+    min-height: 40vh;
+    margin: 20px 3vw 20px 3vw;
+    position: relative;
 }
 
 .prompt-text {
-    font-size: 12px;
+    font-size: 18px;
     margin-left: 5px;
+    margin-bottom: 3vh;
 }
 
 .poll-question {
     margin-top: 15px;
     margin-left: 5px;
+    font-size: 26px;
 }
 
-.poll-option {
-    margin-top: 5px;
-    margin-bottom: 10px;
+.form-container>div:nth-child(odd) {
+    background-color: aliceblue;
+}
+
+.poll-option-label {
+    margin-top: 0.5vw;
+    margin-bottom: 0.5vw;
     margin-left: 8px;
-    font-size: 15px;
+    font-size: 23px;
 }
 
 .poll-radio {
     /* appearance: none; */
-    width: 20px; /* Set the width of the radio button */
-    height: 20px; /* Set the height of the radio button */
-    border-radius: 50%; /* Create a circular shape */
-    border: 2px solid #04395E; /* Set the border color */
-    background-color: white; /* Set the background color */
-    margin-right: 5px; /* Optional: Add spacing between the radio button and text */
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #04395E; 
+    background-color: white;
     vertical-align: middle;
     margin-right: 10px;
 }
@@ -44,11 +50,47 @@
 }
 
 .poll-submit-button {
-    margin-top: 5px;
-    /* margin-bottom: 10px;
-    margin-left: auto */
+    background-color: #04395E!important;
+}
+
+.poll-submit-button:disabled {
+    background-color: #04395E!important;
+}
+
+.poll-delete-button {
+    background-color: #04395E!important;
+}
+
+.poll-delete-button:disabled {
+    background-color: #04395E!important;
 }
 
 .option-votes {
-    padding-left: 200px;
+    padding-left: 1vw;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding-right: 3vw;
+    color:#FF1F66;
 }
+
+.form-container {
+    padding-bottom: 7vh;
+}
+
+.buttons-container {
+    display: flex;
+    vertical-align: bottom;
+    bottom: 1vh;
+    position: absolute;
+    width: 90%;
+    justify-content:space-between;
+    margin-top:2vh;
+    padding: inherit;
+}
+
+@media (min-width: 1200px) {
+    .buttons-container {
+        width: 95%;
+    }
+} 

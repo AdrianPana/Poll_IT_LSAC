@@ -20,29 +20,41 @@ export default function PollCreateModal(props) {
     }
     
     const handleSubmit = (e) => {
-    e.preventDefault()
-    
-    const ops = []
-    for (let i = 0 ; i < optionNo; i++) {
-        ops.push(options[i])
+        e.preventDefault()
+        
+        const ops = []
+        for (let i = 0 ; i < optionNo; i++) {
+            ops.push(options[i])
+        }
+
+        createPoll(title, ops)
+        .then(res => {
+            props.onHide()
+            window.location.reload(false);
+        })
+    };
+
+    const moreOptions = () => {
+        setOptionNo(optionNo + 1)
     }
 
-    createPoll(title, ops)
-    .then(res => {
-        props.onHide()
-    })
-    };
+    const closeModal = () => {
+        props.onHide();
+    }
+
     return (
         <>
             <Modal className='modal'
             {...props}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="modal-title">Create poll</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Label>Title</Form.Label>
+                <Modal.Body className='modal-body'>
+                <button onClick={closeModal} type="button" className="btn-close" aria-label="Close"></button>
+                <Modal.Title className='modal-title'> Create a Poll </Modal.Title>
+                    <Form onSubmit={handleSubmit} className='form-content'>
+                        <div>
+                            <Form.Label>Title</Form.Label>
+                        </div>
+                        <div>
                         <input
                             type='text'
                             name="Question"
@@ -50,18 +62,26 @@ export default function PollCreateModal(props) {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required/>
-                        <Form.Label>Answer Options</Form.Label>
+                        </div>
+                        <div>
+                            <Form.Label>Answer Options</Form.Label>
+                        </div>
                         {
                             [...Array(optionNo)].map((option, index) => (
+                                <div key={index}>
                                 <input key={index}
                                 type='text'
                                 name={index}
-                                placeholder={"Option" + index}
+                                placeholder={"Option " + (index + 1)}
                                 value={options[index]}
                                 onChange={handleOptionsChange}
                                 required/>
+                                </div>
                             ))
                         }
+                        <div>
+                            <Button onClick={moreOptions}> +Add option </Button>
+                        </div>
                         <div>
                             <Button type='submit'> Create poll </Button>
                         </div>

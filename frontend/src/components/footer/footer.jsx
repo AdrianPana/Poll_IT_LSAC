@@ -3,8 +3,8 @@ import './footer.css'
 
 export default function Footer() {
     return (
-        <footer className='fixed-bottom'>
-            <Container>
+        <footer>
+            <Container className='footer-container'>
                 <div className='footer-icons'>
                 <a href="https://instagram.com/lsac.it?igshid=YTQwZjQ0NmI0OA==" target="_blank">
                 <img 

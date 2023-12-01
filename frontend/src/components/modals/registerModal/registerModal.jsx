@@ -11,7 +11,7 @@ export default function RegisterModal(props) {
     const [password, setPassword] = useState('')
     const [confPassword, setConfPassword] = useState('')
     
-      const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         
         register(email, password, confPassword)
@@ -20,19 +20,25 @@ export default function RegisterModal(props) {
             .then(res => {
                 localStorage.setItem("jwt", res.data.message)
                 props.onHide()
+                window.location.reload(false);
             })
         })
-      };
+    };
+
+    const closeModal = () => {
+        props.onHide();
+    }
+
     return (
         <>
             <Modal
             {...props}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="modal-title">Register</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                <Form onSubmit={handleSubmit}>
+                <Modal.Body className='modal-body'>
+                <button onClick={closeModal} type="button" class="btn-close" aria-label="Close"></button>
+                <Modal.Title className='modal-title'> Register </Modal.Title>
+                <Form onSubmit={handleSubmit} className='form-content'>
+                    <div>   
                         <input
                             type='email'
                             name="email"
@@ -40,6 +46,8 @@ export default function RegisterModal(props) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required/>
+                    </div>
+                    <div>
                         <input
                             type='password'
                             name="password"
@@ -47,6 +55,8 @@ export default function RegisterModal(props) {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required/>
+                    </div>
+                    <div>
                         <input
                             type='password'
                             name="confirm-password"
@@ -54,8 +64,9 @@ export default function RegisterModal(props) {
                             value={confPassword}
                             onChange={(e) => setConfPassword(e.target.value)}
                             required/>
+                    </div>
                         <div>
-                            <Button type='submit'> Create account </Button>
+                            <Button className='btn-submit' type='submit' variant='light'> Create account </Button>
                         </div>
                     </Form>
                 </Modal.Body>

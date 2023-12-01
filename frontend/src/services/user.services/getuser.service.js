@@ -1,5 +1,5 @@
 import instance from '../tokenRequestService'
 
 export const getUser = () => {
-    return instance.get(`/users`)
+    return instance.get('/users')
 }

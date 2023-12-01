@@ -5,19 +5,37 @@ import { useEffect, useState } from 'react';
 
 import { vote } from '../../services/poll.services/vote.service';
 import { erase } from '../../services/poll.services/deletepoll.service'
+import { getUser } from '../../services/user.services/getuser.service'
 
-export default function Poll({poll, currentUser}) {
+export default function Poll({poll}) {
     const [selectedOption, setSelectedOption] = useState(null);
     const [canVote, setVote] = useState(false)
     const [canDelete, setDelete] = useState(false)
+    const [currentUser, setUser] = useState(null)
+    const [token, setToken] = useState(localStorage.getItem('jwt'))
 
-    const {_id, question, options, voters, owner} = poll
+    const {_id, title, options, voters, owner} = poll
 
     useEffect(() => {
-        setVote(!voters.includes(currentUser._id))
-        setDelete(owner == currentUser._id)
-    })
-
+        if (currentUser === null) {
+          setDelete(false);
+          setVote(false);
+          setToken(localStorage.getItem('jwt'));
+          if (token) {
+            getUser()
+              .then((res) => {
+                setUser(res.data);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        } else {
+          setVote(!voters.includes(currentUser._id));
+          setDelete(owner == currentUser._id);
+          setToken(token);
+        }
+      }, [currentUser, token, voters, owner]);
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
     };
@@ -27,7 +45,7 @@ export default function Poll({poll, currentUser}) {
         
         vote(_id, selectedOption)
         .then(res => {
-            console.log(res.data)
+            window.location.reload(false);
         })
     };
 
@@ -36,20 +54,20 @@ export default function Poll({poll, currentUser}) {
 
         erase(_id)
         .then(res => {
-            console.log(res)
+            window.location.reload(false);
         })
     }
 
     return (
         <>
         <div className='poll-container'>
-            <Form onSubmit={handleSubmit}>
-                <label className='poll-question'> {question} </label>
+            <Form onSubmit={handleSubmit} className='form-container'>
+                <label className='poll-question'> {title} </label>
                 <div>
                     <label className='prompt-text'> Make a choice: </label>
                 </div>
                 {options.map((option, index) => (
-                    <div key={index}>
+                    <div key={index} className='poll-option'>
                         <label key={index} className='poll-option' >
                         <input 
                             type='radio'
@@ -59,16 +77,14 @@ export default function Poll({poll, currentUser}) {
                             onChange={handleOptionChange}            
                             /> {option['option']}
                             </label>
-                        <span className='option-votes'>{option['votes']}</span>
+                        <div className='option-votes'>{option['votes']}</div>
                         </div>
                     ))}
-                    <div className='poll-submit-button'>
-                        <Button disabled={!canVote || selectedOption == null} variant="dark" type="submit">Vote</Button>
-                    </div>
-                    <div className='poll-delete-button'>
-                        <Button disabled = {!canDelete} variant="danger" onClick={deletePoll}>Delete</Button>
-                    </div>
             </Form>
+            <div className='buttons-container'>
+                <Button className='poll-delete-button' disabled = {!canDelete} onClick={deletePoll}>Delete</Button>
+                <Button className='poll-submit-button' disabled={!canVote || selectedOption == null} onClick={handleSubmit}>Vote</Button>
+            </div>
         </div>
         </>
     )

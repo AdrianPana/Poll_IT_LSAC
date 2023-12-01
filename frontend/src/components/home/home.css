@@ -10,6 +10,7 @@ body {
 .turtle {
     margin-left: auto;
     padding: 0px!important;
+    align-self: center;
 
     & > img {
         max-width: 100%;
@@ -21,11 +22,27 @@ body {
     color: white;
     font-size: 2vw;
     font-weight: bold;
-    padding-left: 5vw;
+    padding-left: 3vw!important;
     padding-top: 8vw!important;
+}
+
+@media (max-width: 767px) {
+.home-para {
+    font-size: 3vw;
+}
 }
 
 .custom-container {
     margin: 0px;
     max-width: none!important;
   }
+
+/* .poll-container {
+    display: inline-block;
+}
+
+@media (max-width: 767px) {
+    .poll-container {
+        display: block;
+    }
+} */
