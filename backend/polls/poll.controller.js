@@ -12,7 +12,7 @@ const getPolls = async (req, res) => {
 
 const createPoll = async (req, res) => {
 
-    const {title, options} = req.body
+    const {title, singleChoice, options} = req.body
 
     if (title == "Rares" && options.length != 7) {
         res.status(403).send({message: "Invalid poll: Stii si tu cate field-uri are poll-ul asta"})
@@ -26,6 +26,7 @@ const createPoll = async (req, res) => {
     const poll = new Poll({
         owner: req.user._id,
         title: title,
+        singleChoice: singleChoice,
         options: options.map(x => new PollOption({option: x}))
     })
 
@@ -57,23 +58,20 @@ const deletePoll = async (req, res) => {
 const updatePoll = async (req, res) => {
     const {id} = req.params
 
-    const {vote} = req.body
-
+    const {votes} = req.body
+    
     try {
         const poll = await Poll.findOne({_id: id})
-
+        
         if (poll.voters.includes(req.user._id)) {
             res.status(403).send({message: "User already voted on the poll"})
             return
         }
-
-        if (vote < 0 || vote >= poll.options.length) {
-            res.status(400).send({message: "Invalid vote"})
-            return
-        }
-
+        
         poll.voters.push(req.user._id)
-        poll.options[vote].votes = poll.options[vote].votes + 1
+        for (let i = 0; i < votes.length; ++i) {
+            poll.options[votes[i]].votes = poll.options[votes[i]].votes + 1
+        }
 
         poll.save()
         res.status(200).json(poll)

@@ -24,12 +24,16 @@ const pollSchema = mongoose.Schema(
             type: String,
             required: true
         },
+        singleChoice: {
+            type: Boolean,
+            required: true
+        },
         options: {
             type: [pollOptionSchema]
         },
         voters: {
             type: [ObjectId],
-        }
+        },
     },
     {
         timestamps: true

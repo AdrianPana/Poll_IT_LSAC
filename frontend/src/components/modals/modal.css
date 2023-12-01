@@ -54,3 +54,18 @@
 .btn-submit {
     margin-top: 6vh;
 }
+
+.vote-title {
+    font-weight: 300;
+}
+
+.btn-radio {
+    /* appearance: none; */
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #04395E; 
+    background-color: white;
+    vertical-align: middle;
+    margin-right: 10px;
+}

@@ -10,6 +10,7 @@ export default function PollCreateModal(props) {
     const [title, setTitle] = useState('')
     const [optionNo, setOptionNo] = useState(3)
     const [options, setOptions] = useState([])
+    const [singleChoice, setChoiceType] = useState(true)
 
     const handleOptionsChange = (e) => {
         const {name, value} = e.target
@@ -27,7 +28,7 @@ export default function PollCreateModal(props) {
             ops.push(options[i])
         }
 
-        createPoll(title, ops)
+        createPoll(title, singleChoice, ops)
         .then(res => {
             props.onHide()
             window.location.reload(false);
@@ -63,6 +64,25 @@ export default function PollCreateModal(props) {
                             onChange={(e) => setTitle(e.target.value)}
                             required/>
                         </div>
+
+                            <div>
+                            <Form.Label className='vote-title'>Voting type</Form.Label>
+                            </div>
+                            <div>
+                                <Form.Label>
+                                <input name='single' type='radio' className='btn-radio'
+                                    value={0} checked={singleChoice == true} onChange={() => setChoiceType(true)}/>
+                                Single choice
+                                </Form.Label>
+                            </div>
+                            <div>
+                                <Form.Label>
+                                <input name='multiple' type='radio' className='btn-radio'
+                                value={1} checked={singleChoice == false} onChange={() => setChoiceType(false)}/>
+                                Multiple choice
+                                </Form.Label>
+                            </div>
+
                         <div>
                             <Form.Label>Answer Options</Form.Label>
                         </div>
