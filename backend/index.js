@@ -7,7 +7,7 @@ require('dotenv').config()
 
 const app = express()
 const port = process.env.PORT
-const pass = process.env.PASS
+const mongourl = process.env.MONGOURL
 
 const router = require('./router')
 
@@ -24,7 +24,7 @@ app.listen(port, () => {
     console.log("IA-MA IN IT")
 })
 
-mongoose.connect('mongodb+srv://admin:' + pass + '@pollitcluster.lu8sanl.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(mongourl)
 .then(() => {
     console.log("Connected to MongoDB")
 }).catch(error => {

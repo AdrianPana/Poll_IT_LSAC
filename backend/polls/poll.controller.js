@@ -1,4 +1,4 @@
-const {Poll, PollOption} = require('./poll.model')
+const {Poll} = require('./poll.model')
 
 const getPolls = async (req, res) => {
 
@@ -15,8 +15,7 @@ const createPoll = async (req, res) => {
     const {title, singleChoice, options} = req.body
 
     if (title == "Rares" && options.length != 7) {
-        res.status(403).send({message: "Invalid poll: Stii si tu cate field-uri are poll-ul asta"})
-        return
+        return res.status(403).send({message: "Invalid poll: Stii si tu cate field-uri are poll-ul asta"})
     }
 
     if (title == "Codrut") {
@@ -27,7 +26,7 @@ const createPoll = async (req, res) => {
         owner: req.user._id,
         title: title,
         singleChoice: singleChoice,
-        options: options.map(x => new PollOption({option: x}))
+        options: options.map(x => {return {option: x, votes: 0}})
     })
 
     try {
@@ -70,11 +69,15 @@ const updatePoll = async (req, res) => {
         
         poll.voters.push(req.user._id)
         for (let i = 0; i < votes.length; ++i) {
-            poll.options[votes[i]].votes = poll.options[votes[i]].votes + 1
+            poll.options[votes[i]] = {
+                option: poll.options[votes[i]].option,
+                votes: poll.options[votes[i]].votes + 1
+            }
         }
-
-        poll.save()
-        res.status(200).json(poll)
+        await poll.save().then(() => {
+            console.log(poll)
+            res.status(200).json(poll)
+        })
     } catch (err) {
         res.status(500).send({message: err})
     }

@@ -1,19 +1,6 @@
 const mongoose = require('mongoose')
 const { ObjectId } = require("mongoose/lib/types");
 
-const pollOptionSchema = mongoose.Schema(
-    {
-        option: {
-            type: String,
-            required: true
-        },
-        votes: {
-            type: Number,
-            default: 0
-        }
-    }
-)
-
 const pollSchema = mongoose.Schema(
     {
         owner: {
@@ -29,7 +16,7 @@ const pollSchema = mongoose.Schema(
             required: true
         },
         options: {
-            type: [pollOptionSchema]
+            type: [{}]
         },
         voters: {
             type: [ObjectId],
@@ -40,7 +27,6 @@ const pollSchema = mongoose.Schema(
     }
 )
 
-const PollOption = mongoose.model('PollOption', pollOptionSchema)
 const Poll = mongoose.model('Poll', pollSchema)
 
-module.exports = {Poll, PollOption}
+module.exports = {Poll}

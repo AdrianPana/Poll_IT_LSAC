@@ -23,16 +23,14 @@ const registerUser = async (req, res) => {
     const validateInput = validateRegisterInput(email, password, confirmPassword)
 
     if (validateInput !== true) {
-        res.status(400).send({message: validateInput})
-        return
+        return res.status(400).send({message: validateInput})
     }
 
     try {
-        const duplicateUser = await User.findOne({email}).exec()
+        const duplicateUser = await User.findOne({email: email}).exec()
 
         if (duplicateUser != null) {
-            res.status(409).send({message: 'That email address is already in use!'})
-            return
+            return res.status(409).send({message: 'That email address is already in use!'})
         }    
     } catch (err) {
         res.status(500).send({message: err})
@@ -58,21 +56,19 @@ const loginUser = async (req, res) => {
         const foundUser = await User.findOne({email: email}).exec()
 
         if (foundUser == null) {
-            res.status(404).send({message: `That email address or password you entered is invalid!`})
-            return
+            return res.status(404).send({message: `That email address or password you entered is invalid!`})
         }
 
-        if (bcrypt.compareSync(password, foundUser.password)) {
+        if (!bcrypt.compareSync(password, foundUser.password)) {
+            return res.status(404).send({message: `That email address or password you entered is invalid!`})
+        }
 
-            const payload = { id: foundUser._id, email: foundUser.email };
-            const token = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: '1d' 
-           });
+        const payload = { id: foundUser._id, email: foundUser.email };
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '1d' 
+        });
     
-            res.status(200).send({ message: token })
-        } else {
-            res.status(404).send({message: `That email address or password you entered is invalid!`})
-        }
+        res.status(200).send({ message: token })
     } catch (err) {
         res.status(500).send({message: err})
     }
@@ -80,11 +76,10 @@ const loginUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        const foundUser = await User.findOne({_id: req.user._id}).exec()
+        const foundUser = await User.findById(req.user._id).exec()
 
         if (foundUser == null) {
-            res.status(404).send({message: `Couldn't find user`})
-            return
+            return res.status(404).send({message: `Couldn't find user`})
         }
 
         res.status(200).json(foundUser)

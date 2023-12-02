@@ -7,22 +7,20 @@ const auth = async (req, res, next) => {
         const token = authHeader && authHeader.split(' ')[1];
 
         if (!token) {
-            res.status(400).send({message: "Missing token"})
-            return 
+            return res.status(400).send({message: "Missing token"})
         }
 
-        const { id } = await jwt.verify(token, process.env.JWT_SECRET)
+        const { id } = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findById(id);
 
         if (!user) {
-            res.status(400).send({message: "Unauthorized"})
-            return 
+            return res.status(400).send({message: "Unauthorized"})
         }
 
         req.user = user;
         next();
     } catch (e) {
-        next(e);
+        return res.status(500).send({message: e});
     }
 }
 
