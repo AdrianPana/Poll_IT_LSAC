@@ -21,7 +21,11 @@ export default function RegisterModal(props) {
                 localStorage.setItem("jwt", res.data.message)
                 props.onHide()
                 window.location.reload(false);
+            }).catch((e) => {
+                console.log(e)
             })
+        }).catch((e) => {
+            console.log(e)
         })
     };
 

@@ -21,6 +21,8 @@ export default function Home() {
             .then((res) => {
                 setPolls(res.data)
                 setTwoColPolls(renderPolls(res.data))
+            }).catch((e) => {
+                console.log(e)
             })
     }, [])
 

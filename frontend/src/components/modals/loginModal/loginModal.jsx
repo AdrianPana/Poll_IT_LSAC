@@ -17,6 +17,8 @@ export default function LoginModal(props) {
             localStorage.setItem("jwt", res.data.message)
             props.onHide()
             window.location.reload(false);
+        }).catch((e) => {
+            console.log(e)
         })
     };
 

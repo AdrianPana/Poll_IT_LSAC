@@ -75,7 +75,6 @@ const updatePoll = async (req, res) => {
             }
         }
         await poll.save().then(() => {
-            console.log(poll)
             res.status(200).json(poll)
         })
     } catch (err) {

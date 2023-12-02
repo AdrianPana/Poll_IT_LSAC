@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 app.use('/api', router)
 
 app.listen(port, () => {
-    console.log("IA-MA IN IT")
+    console.log("Peretii au urechi si asculta (e Codrut in ei)")
 })
 
 mongoose.connect(mongourl)

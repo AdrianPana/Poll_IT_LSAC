@@ -60,11 +60,15 @@ export default function Poll({poll}) {
             Vote(_id, [selectedOption])
             .then(res => {
                 window.location.reload(false);
+            }).catch((e) => {
+                console.log(e)
             })
         } else {
             Vote(_id, selectedOptions)
             .then(res => {
                 window.location.reload(false);
+            }).catch((e) => {
+                console.log(e)
             })
         }
     };
@@ -75,6 +79,8 @@ export default function Poll({poll}) {
         erase(_id)
         .then(res => {
             window.location.reload(false);
+        }).catch((e) => {
+            console.log(e)
         })
     }
 

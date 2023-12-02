@@ -32,11 +32,17 @@ export default function PollCreateModal(props) {
         .then(res => {
             props.onHide()
             window.location.reload(false);
+        }).catch((e) => {
+            console.log(e)
         })
     };
 
     const moreOptions = () => {
         setOptionNo(optionNo + 1)
+    }
+
+    const removeOption = () => {
+        setOptionNo(optionNo - 1)
     }
 
     const closeModal = () => {
@@ -47,7 +53,7 @@ export default function PollCreateModal(props) {
         <>
             <Modal className='modal'
             {...props}
-            >
+            >   
                 <Modal.Body className='modal-body'>
                 <button onClick={closeModal} type="button" className="btn-close" aria-label="Close"></button>
                 <Modal.Title className='modal-title'> Create a Poll </Modal.Title>
@@ -88,6 +94,7 @@ export default function PollCreateModal(props) {
                         </div>
                         {
                             [...Array(optionNo)].map((option, index) => (
+                                <>
                                 <div key={index}>
                                 <input key={index}
                                 type='text'
@@ -97,8 +104,17 @@ export default function PollCreateModal(props) {
                                 onChange={handleOptionsChange}
                                 required/>
                                 </div>
-                            ))
+                                </>
+                                ))
                         }
+                        { optionNo > 3 ? (
+                            <div>
+                            <Button variant='danger' onClick={removeOption}>-Remove option</Button>
+                            </div>
+                        ) : (
+                            <>
+                            </>
+                        )}
                         <div>
                             <Button onClick={moreOptions}> +Add option </Button>
                         </div>
